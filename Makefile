@@ -20,7 +20,6 @@ endif
 help:
 	@echo "Run 'make all' to update configuration against the current KUBECONFIG"
 
-# test
 all:  core services
 
 check: check-core check-services check-boskos
