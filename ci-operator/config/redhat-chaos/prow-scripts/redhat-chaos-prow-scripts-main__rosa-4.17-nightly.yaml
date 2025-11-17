@@ -7,8 +7,8 @@ base_images:
     name: "4.17"
     namespace: ocp
     tag: cli
-  cli-ocm:
-    name: cli-ocm
+  ocm-cli:
+    name: ocm-cli
     namespace: ci
     tag: latest
   ocp-qe-perfscale-ci:
@@ -46,8 +46,8 @@ resources:
       cpu: 100m
       memory: 200Mi
 tests:
-- as: krkn-tests-rosa
-  cron: 0 1 19 * *
+- always_run: false
+  as: krkn-tests-rosa
   steps:
     cluster_profile: aws-qe
     env:
@@ -73,8 +73,9 @@ tests:
     - ref: redhat-chaos-pod-scenarios-prometheus-disruption
     - chain: redhat-chaos-krkn-hub-random-system-pods-disruption
     workflow: rosa-aws-sts
-- as: krkn-tests-rosa-node
-  cron: 0 4 19 * *
+  timeout: 8h0m0s
+- always_run: false
+  as: krkn-tests-rosa-node
   steps:
     cluster_profile: aws-qe
     env:
@@ -94,11 +95,11 @@ tests:
       - redhat-chaos-cerberus
       - openshift-qe-cluster-density-v2-observer
     test:
-    - ref: redhat-chaos-start-krkn
     - chain: redhat-chaos-krkn-hub-node-tests
     workflow: rosa-aws-sts
-- as: krkn-tests-rosa-hcp
-  cron: 0 1 27 * *
+  timeout: 8h0m0s
+- always_run: false
+  as: krkn-tests-rosa-hcp
   steps:
     allow_skip_on_success: true
     cluster_profile: aws-perfscale-qe
@@ -127,9 +128,9 @@ tests:
     - ref: redhat-chaos-pod-scenarios-prometheus-disruption
     - chain: redhat-chaos-krkn-hub-random-system-pods-disruption
     workflow: rosa-aws-sts-hcp
-  timeout: 5h0m0s
-- as: krkn-rosa-hcp-node
-  cron: 0 1 15 * *
+  timeout: 7h0m0s
+- always_run: false
+  as: krkn-rosa-hcp-node
   steps:
     allow_skip_on_success: true
     cluster_profile: aws-perfscale-qe
@@ -158,7 +159,7 @@ tests:
     - chain: redhat-chaos-krkn-hub-cluster-disruption
     - chain: redhat-chaos-krkn-hub-worker-node-tests
     workflow: rosa-aws-sts-hcp
-  timeout: 5h0m0s
+  timeout: 7h0m0s
 - always_run: false
   as: krkn-tests-rosa-infra
   steps:

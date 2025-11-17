@@ -24,13 +24,28 @@ fi
 cluster_infra=$(oc get  infrastructure cluster -ojsonpath='{.status.platformStatus.type}')
 hypershift_pods=$(! oc -n hypershift get pods| grep operator >/dev/null ||oc -n hypershift get pods| grep operator |wc -l)
 if [[ $cluster_infra == "BareMetal" && $hypershift_pods -ge 1 ]];then	
-        echo "Executing cluster-density-v2 in hypershift cluster"
-        if [[ -f $SHARED_DIR/proxy-conf.sh ]];then
-                echo "Set http proxy for hypershift cluster"
-                . $SHARED_DIR/proxy-conf.sh
+    echo "Executing cluster-density-v2 in hypershift cluster"
+    if [[ -f $SHARED_DIR/proxy-conf.sh ]];then
+        echo "Set http proxy for hypershift cluster"
+        . $SHARED_DIR/proxy-conf.sh
+    fi
+    echo "Configure KUBECONFIG for hosted cluster and execute kube-buner in it"
+    export KUBECONFIG=$SHARED_DIR/nested_kubeconfig
+fi
+
+# Managment Kubeconfig for ROSA-HCP
+# Set this variable only for HCP clusters on AWS
+CONTROL_PLANE_TOPOLOGY=$(oc get infrastructure cluster -o jsonpath='{.status.controlPlaneTopology}')
+if [[ ${CONTROL_PLANE_TOPOLOGY} == "External" && $cluster_infra == "AWS" ]]; then
+    if [[ -f "${SHARED_DIR}/hs-mc.kubeconfig" ]]; then
+        # Check if the cluster is accessible from prow environment, 
+        # Set this variable only if accessible
+        MC_CLUSTER_INFRA=$(oc --kubeconfig="${SHARED_DIR}/hs-mc.kubeconfig" get  infrastructure cluster -ojsonpath='{.status.platformStatus.type}')
+        if [[ $MC_CLUSTER_INFRA == "AWS" ]]; then
+            export MC_KUBECONFIG="${SHARED_DIR}/hs-mc.kubeconfig"
+            export ES_INDEX=ripsaw-kube-burner
         fi
-        echo "Configure KUBECONFIG for hosted cluster and execute kube-buner in it"
-        export KUBECONFIG=$SHARED_DIR/nested_kubeconfig
+    fi
 fi
 
 REPO_URL="https://github.com/cloud-bulldozer/e2e-benchmarking";
@@ -39,18 +54,11 @@ TAG_OPTION="--branch $(if [ "$E2E_VERSION" == "default" ]; then echo "$LATEST_TA
 git clone $REPO_URL $TAG_OPTION --depth 1
 pushd e2e-benchmarking/workloads/kube-burner-ocp-wrapper
 export WORKLOAD=node-density-cni
-
-# A non-indexed warmup run
-ES_SERVER="" EXTRA_FLAGS="--pods-per-node=50 --pod-ready-threshold=2m" ./run.sh
-
-# The measurable run
-export EXTRA_FLAGS="--gc-metrics=true --pods-per-node=$PODS_PER_NODE --namespaced-iterations=$NAMESPACED_ITERATIONS --iterations-per-namespace=$ITERATIONS_PER_NAMESPACE --profile-type=${PROFILE_TYPE}"
-
-
+export EXTRA_FLAGS="--gc-metrics=true --pods-per-node=$PODS_PER_NODE --namespaced-iterations=$NAMESPACED_ITERATIONS --iterations-per-namespace=$ITERATIONS_PER_NAMESPACE --profile-type=${PROFILE_TYPE} --pprof=${PPROF}"
 export ES_SERVER="https://$ES_USERNAME:$ES_PASSWORD@$ES_HOST"
 
-rm -f ${SHARED_DIR}/index.json
 ./run.sh
 
-folder_name=$(ls -t -d /tmp/*/ | head -1)
-jq ".iterations = $PODS_PER_NODE" $folder_name/index_data.json >> ${SHARED_DIR}/index_data.json
+if [[ ${PPROF} == "true" ]]; then
+  cp -r pprof-data "${ARTIFACT_DIR}/"
+fi

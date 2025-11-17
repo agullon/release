@@ -14,7 +14,6 @@ approvers:
 - bradmwilliams
 - celebdor
 - cooktheryan
-- coreydaley
 - coverprice
 - cybertron
 - deads2k
@@ -60,7 +59,6 @@ approvers:
 - pratikmahajan
 - rphillips
 - runcom
-- russellb
 - rvanderp3
 - sadasu
 - sdodson
@@ -77,7 +75,6 @@ approvers:
 - travier
 - tremes
 - trilokgeer
-- trozet
 - yuqi-zhang
 - zaneb
 options: {}
@@ -91,7 +88,6 @@ reviewers:
 - bradmwilliams
 - celebdor
 - cooktheryan
-- coreydaley
 - coverprice
 - cybertron
 - deads2k
@@ -137,7 +133,6 @@ reviewers:
 - pratikmahajan
 - rphillips
 - runcom
-- russellb
 - rvanderp3
 - sadasu
 - sdodson
@@ -154,6 +149,5 @@ reviewers:
 - travier
 - tremes
 - trilokgeer
-- trozet
 - yuqi-zhang
 - zaneb

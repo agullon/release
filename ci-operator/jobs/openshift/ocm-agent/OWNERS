@@ -6,9 +6,22 @@
 
 approvers:
 - a7vicky
+- abyrne55
 - bmeng
+- bng0y
+- clcollins
+- dustman9000
+- iamkirkbater
+- nikokolas3270
+- rafael-azevedo
 - ravitri
+- rogbas
+- sam-nguyen7
+- smarthall
+- theautoroboto
 - tkong-redhat
+- typeid
+- wanghaoran1988
 options: {}
 reviewers:
 - a7vicky
@@ -16,11 +29,11 @@ reviewers:
 - chamalabey
 - charlesgong
 - devppratik
-- hectorakemp
 - ravitri
 - rbhilare
 - tafhim
 - theundeadking
 - tkong-redhat
 - typeid
+- vaidehi411
 - xiaoyu74

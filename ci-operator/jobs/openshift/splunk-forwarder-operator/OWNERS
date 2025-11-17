@@ -6,6 +6,7 @@
 
 approvers:
 - abyrne55
+- bergmannf
 - bmeng
 - bng0y
 - boranx
@@ -13,10 +14,8 @@ approvers:
 - clcollins
 - dem4gus
 - dustman9000
-- fahlmant
 - iamkirkbater
 - jaybeeunix
-- nikokolas3270
 - npecka
 - pshickeydev
 - rafael-azevedo
@@ -26,7 +25,6 @@ approvers:
 - smarthall
 - theautoroboto
 - typeid
-- wanghaoran1988
 - wshearn
 options: {}
 reviewers:

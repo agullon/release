@@ -4,7 +4,7 @@ postsubmits:
     always_run: false
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -23,7 +23,7 @@ postsubmits:
         - --target=merge-gke-nongroovy-compatibility-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -63,7 +63,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -81,7 +81,7 @@ postsubmits:
         - --target=merge-gke-nongroovy-e2e-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -121,7 +121,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -140,7 +140,7 @@ postsubmits:
         - --target=merge-gke-operator-e2e-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -180,7 +180,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -199,7 +199,7 @@ postsubmits:
         - --target=merge-gke-qa-e2e-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -239,7 +239,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -257,7 +257,7 @@ postsubmits:
         - --target=merge-gke-scanner-v4-install-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -297,7 +297,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -315,7 +315,7 @@ postsubmits:
         - --target=merge-gke-sensor-integration-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -355,7 +355,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -374,7 +374,7 @@ postsubmits:
         - --target=merge-gke-ui-e2e-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -414,7 +414,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -432,7 +432,7 @@ postsubmits:
         - --target=merge-gke-upgrade-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -472,7 +472,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -490,7 +490,7 @@ postsubmits:
         - --target=merge-gke-version-compatibility-tests
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -530,7 +530,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -550,7 +550,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -584,7 +584,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -604,7 +604,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -638,7 +638,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -658,7 +658,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -692,7 +692,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -712,7 +712,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -746,7 +746,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -766,7 +766,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -800,7 +800,7 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
@@ -820,7 +820,7 @@ postsubmits:
         - --variant=ocp-4-12
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -854,16 +854,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-compliance-e2e-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-compliance-e2e-tests
     spec:
       containers:
       - args:
@@ -871,10 +871,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-compliance-e2e-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -908,16 +908,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-nongroovy-e2e-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-nongroovy-e2e-tests
     spec:
       containers:
       - args:
@@ -925,10 +925,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-nongroovy-e2e-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -962,16 +962,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-operator-e2e-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-operator-e2e-tests
     spec:
       containers:
       - args:
@@ -979,10 +979,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-operator-e2e-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -1016,16 +1016,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-qa-e2e-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-qa-e2e-tests
     spec:
       containers:
       - args:
@@ -1033,10 +1033,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-qa-e2e-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -1070,16 +1070,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-scanner-v4-install-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-scanner-v4-install-tests
     spec:
       containers:
       - args:
@@ -1087,10 +1087,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-scanner-v4-install-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -1124,16 +1124,16 @@ postsubmits:
     always_run: true
     branches:
     - ^master$
-    cluster: build05
+    cluster: build02
     decorate: true
     decoration_config:
       skip_cloning: true
       timeout: 5h0m0s
     labels:
-      ci-operator.openshift.io/variant: ocp-4-18
+      ci-operator.openshift.io/variant: ocp-4-20
       ci.openshift.io/generator: prowgen
     max_concurrency: 6
-    name: branch-ci-stackrox-stackrox-master-ocp-4-18-merge-ui-e2e-tests
+    name: branch-ci-stackrox-stackrox-master-ocp-4-20-merge-ui-e2e-tests
     spec:
       containers:
       - args:
@@ -1141,10 +1141,10 @@ postsubmits:
         - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
         - --report-credentials-file=/etc/report/credentials
         - --target=merge-ui-e2e-tests
-        - --variant=ocp-4-18
+        - --variant=ocp-4-20
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:

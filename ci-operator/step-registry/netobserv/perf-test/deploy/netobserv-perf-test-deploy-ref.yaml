@@ -4,14 +4,14 @@ ref:
   cli: latest
   commands: netobserv-perf-test-deploy-commands.sh
   env:
-    - name: INSTALLATION_SOURCE
+    - name: MULTISTAGE_PARAM_OVERRIDE_INSTALLATION_SOURCE
       default: "Source"
       documentation: "Source to install netobserv from, Source = upstream, Internal = downstream"
-    - name: UPSTREAM_IMAGE
-      default: ""
+    - name: MULTISTAGE_PARAM_OVERRIDE_UPSTREAM_IMAGE
+      default: quay.io/netobserv/network-observability-operator-catalog:v0.0.0-sha-main
       documentation: Specify upstream custom catalogsource image to use for NOO;only effective if INSTALLATION_SOURCE == Source
-    - name: DOWNSTREAM_IMAGE
-      default: ""
+    - name: MULTISTAGE_PARAM_OVERRIDE_DOWNSTREAM_IMAGE
+      default: quay.io/redhat-user-workloads/ocp-network-observab-tenant/catalog-ystream:latest
       documentation: Specify downstream custom catalogsource image to use for NOO; only effective if INSTALLATION_SOURCE == Internal
     - name: LOKI_OPERATOR
       default: ""
@@ -34,6 +34,12 @@ ref:
     - name: PATCH_FLOWLOGS_IMAGE
       default: "false"
       documentation: Patch NOO CSV with custom FLP image
+    - name: MULTISTAGE_PARAM_OVERRIDE_SAMPLING
+      default: ""
+      documentation: "Override sampling rate"
+    - name: MULTISTAGE_PARAM_OVERRIDE_LOKI_ENABLE
+      default: ""
+      documentation: "Override enable/disable Loki"
   dependencies:
   - env: EBPFAGENT_PR_IMAGE
     name: netobserv-ebpf-agent

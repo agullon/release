@@ -5,6 +5,19 @@ set -o nounset
 set -o pipefail
 set -x
 
+if [[ -n $MULTISTAGE_PARAM_OVERRIDE_INSTALLATION_SOURCE ]] ; then
+    export INSTALLATION_SOURCE="$MULTISTAGE_PARAM_OVERRIDE_INSTALLATION_SOURCE"
+fi
+
+if [[ -n $MULTISTAGE_PARAM_OVERRIDE_DOWNSTREAM_IMAGE ]] ; then
+    export DOWNSTREAM_IMAGE="$MULTISTAGE_PARAM_OVERRIDE_DOWNSTREAM_IMAGE"
+fi
+
+if [[ -n $MULTISTAGE_PARAM_OVERRIDE_UPSTREAM_IMAGE ]] ; then
+    export UPSTREAM_IMAGE="$MULTISTAGE_PARAM_OVERRIDE_UPSTREAM_IMAGE"
+fi
+
+
 which aws
 export AWS_SHARED_CREDENTIALS_FILE=${CLUSTER_PROFILE_DIR}/.awscred
 mkdir -p $HOME/.aws
@@ -17,7 +30,18 @@ source scripts/netobserv.sh
 deploy_lokistack
 deploy_kafka
 deploy_netobserv
-createFlowCollector "-p KafkaConsumerReplicas=${KAFKA_CONSUMER_REPLICAS}"
+
+PARAMETERS="-p KafkaConsumerReplicas=${KAFKA_CONSUMER_REPLICAS}"
+
+if [[ -n ${MULTISTAGE_PARAM_OVERRIDE_SAMPLING:-} ]]; then
+    PARAMETERS+=" EBPFSamplingRate=${MULTISTAGE_PARAM_OVERRIDE_SAMPLING}"
+fi
+
+if [[ -n ${MULTISTAGE_PARAM_OVERRIDE_LOKI_ENABLE:-} ]]; then
+    PARAMETERS+=" LokiEnable=${MULTISTAGE_PARAM_OVERRIDE_LOKI_ENABLE}"
+fi
+
+createFlowCollector ${PARAMETERS}
 
 if [[ $PATCH_EBPFAGENT_IMAGE == "true" && -n $EBPFAGENT_PR_IMAGE ]]; then
     patch_netobserv "ebpf" "$EBPFAGENT_PR_IMAGE"

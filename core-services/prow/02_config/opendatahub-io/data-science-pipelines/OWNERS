@@ -6,17 +6,13 @@
 
 approvers:
 - accorvin
-- dharmitd
 - gmfrasca
 - humairak
 - mprahl
-- rimolive
 options: {}
 reviewers:
-- dharmitd
 - gmfrasca
 - hbelmiro
 - humairak
 - mprahl
-- rimolive
 - vaniharipriya

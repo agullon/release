@@ -5,7 +5,7 @@ presubmits:
     branches:
     - ^release-4\.11$
     - ^release-4\.11-
-    cluster: build06
+    cluster: build03
     context: ci/prow/ci-index
     decorate: true
     decoration_config:
@@ -24,7 +24,7 @@ presubmits:
         - --target=ci-index
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -60,7 +60,7 @@ presubmits:
     branches:
     - ^release-4\.11$
     - ^release-4\.11-
-    cluster: build06
+    cluster: build03
     context: ci/prow/ci-job
     decorate: true
     decoration_config:
@@ -70,7 +70,7 @@ presubmits:
       pj-rehearse.openshift.io/can-be-rehearsed: "true"
     name: pull-ci-openshift-kni-cluster-group-upgrades-operator-release-4.11-ci-job
     rerun_command: /test ci-job
-    skip_if_only_changed: ^(?:.*/)?(?:\.gitignore|\.tekton/.*|.*\.md|OWNERS|OWNERS_ALIASES|LICENSE)$
+    skip_if_only_changed: ^(?:.*/)?(?:\.gitignore|\.tekton/.*|\.konflux/.*|.*\.md|OWNERS|OWNERS_ALIASES|LICENSE)$
     spec:
       containers:
       - args:
@@ -80,7 +80,7 @@ presubmits:
         - --target=ci-job
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -116,7 +116,7 @@ presubmits:
     branches:
     - ^release-4\.11$
     - ^release-4\.11-
-    cluster: build06
+    cluster: build03
     context: ci/prow/images
     decorate: true
     decoration_config:
@@ -135,7 +135,7 @@ presubmits:
         - --target=[images]
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:
@@ -183,7 +183,7 @@ presubmits:
       pj-rehearse.openshift.io/can-be-rehearsed: "true"
     name: pull-ci-openshift-kni-cluster-group-upgrades-operator-release-4.11-integration
     rerun_command: /test integration
-    skip_if_only_changed: ^(?:.*/)?(?:\.gitignore|\.tekton/.*|.*\.md|OWNERS|OWNERS_ALIASES|LICENSE)$
+    skip_if_only_changed: ^(?:.*/)?(?:\.gitignore|\.tekton/.*|\.konflux/.*|.*\.md|OWNERS|OWNERS_ALIASES|LICENSE)$
     spec:
       containers:
       - args:
@@ -195,7 +195,7 @@ presubmits:
         - --target=integration
         command:
         - ci-operator
-        image: ci-operator:latest
+        image: quay-proxy.ci.openshift.org/openshift/ci:ci_ci-operator_latest
         imagePullPolicy: Always
         name: ""
         resources:

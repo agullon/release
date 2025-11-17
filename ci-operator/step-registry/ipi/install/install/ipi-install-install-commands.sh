@@ -132,6 +132,22 @@ function populate_artifact_dir() {
     mkdir -p "${ARTIFACT_DIR}/clusterapi_output-${current_time}"
     cp -rpv "${dir}/.clusterapi_output/"{,**/}*.{log,yaml} "${ARTIFACT_DIR}/clusterapi_output-${current_time}" 2>/dev/null
   fi
+
+  # Capture infrastructure issue log to help gather the datailed failure message in junit files
+  if [[ "$ret" == "4" ]] || [[ "$ret" == "5" ]]; then
+    grep -Er "Throttling: Rate exceeded|\
+rateLimitExceeded|\
+The maximum number of [A-Za-z ]* has been reached|\
+The number of .* is larger than the maximum allowed size|\
+Quota .* exceeded|\
+Cannot create more than .* for this subscription|\
+The request is being throttled as the limit has been reached|\
+SkuNotAvailable|\
+Exceeded limit .* for zone|\
+Operation could not be completed as it results in exceeding approved .* quota|\
+A quota has been reached for project|\
+LimitExceeded.*exceed quota" ${ARTIFACT_DIR} > "${SHARED_DIR}/install_infrastructure_failure.log" || true
+  fi
 }
 
 
@@ -289,8 +305,8 @@ function prepare_next_steps() {
 
 function inject_promtail_service() {
   export OPENSHIFT_INSTALL_INVOKER="openshift-internal-ci/${JOB_NAME}/${BUILD_ID}"
-  export PROMTAIL_IMAGE="quay.io/openshift-cr/promtail"
-  export PROMTAIL_VERSION="v2.4.1"
+  export PROMTAIL_IMAGE="quay.io/openshift-logging/promtail"
+  export PROMTAIL_VERSION="v3.4.3"
   export LOKI_ENDPOINT=https://logging-loki-openshift-operators-redhat.apps.cr.j7t7.p1.openshiftapps.com/api/logs/v1/openshift-trt/loki/api/v1
 
   config_dir=/tmp/promtail
@@ -630,6 +646,9 @@ gcp)
     elif [ -f "${SHARED_DIR}/xpn_min_perm_passthrough.json" ]; then
       echo "$(date -u --rfc-3339=seconds) - Using the IAM service account of minimal permissions for deploying OCP cluster into GCP shared VPC..."
       export GOOGLE_CLOUD_KEYFILE_JSON="${SHARED_DIR}/xpn_min_perm_passthrough.json"
+    elif [ -f "${SHARED_DIR}/xpn_min_perm_cco_manual.json" ]; then
+      echo "$(date -u --rfc-3339=seconds) - Using the IAM service account of minimal permissions for deploying OCP cluster into GCP shared VPC with CCO in Manual mode..."
+      export GOOGLE_CLOUD_KEYFILE_JSON="${SHARED_DIR}/xpn_min_perm_cco_manual.json"
     elif [ -f "${SHARED_DIR}/xpn_byo-hosted-zone_min_perm_passthrough.json" ]; then
       echo "$(date -u --rfc-3339=seconds) - Using the IAM service account of minimal permissions for deploying OCP cluster into GCP shared VPC using BYO hosted zone..."
       export GOOGLE_CLOUD_KEYFILE_JSON="${SHARED_DIR}/xpn_byo-hosted-zone_min_perm_passthrough.json"
@@ -702,7 +721,7 @@ set -o errexit
 
 # Platform specific manifests adjustments
 case "${CLUSTER_TYPE}" in
-azure4|azure-arm64) 
+azure4|azure-arm64)
     if [[ "${BOOT_DIAGNOSTICS:-}" == "true" ]]; then
       inject_boot_diagnostics ${dir}
     fi
@@ -752,6 +771,15 @@ do
   manifest="$( basename "${item}" )"
   cp "${item}" "${dir}/tls/${manifest##tls_}"
 done <   <( find "${SHARED_DIR}" \( -name "tls_*.key" -o -name "tls_*.pub" \) -print0)
+
+echo "Will include following openshift config files:"
+find "${SHARED_DIR}" \( -name "openshift_manifests_[0-9]*.yml" -o -name "openshift_manifests_[0-9]*.yaml" \)
+
+while IFS= read -r -d '' item
+do
+  ocp_config_file="$( basename "${item}" )"
+  cp "${item}" "${dir}/openshift/${ocp_config_file##openshift_manifests_}"
+done <   <( find "${SHARED_DIR}" \( -name "openshift_manifests_[0-9]*.yml" -o -name "openshift_manifests_[0-9]*.yaml" \) -print0)
 
 # Collect bootstrap logs for all azure clusters
 case "${CLUSTER_TYPE}" in

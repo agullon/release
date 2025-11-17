@@ -5,18 +5,10 @@
 # See the OWNERS docs: https://git.k8s.io/community/contributors/guide/owners.md
 
 approvers:
-- ahitacat
-- ciaranroche
-- cristianoveiga
-- davidleerh
-- gdbranco
 - lucasponce
-- macgregor
-- machi1990
 - miguelsorianod
-- oriadler
+- robpblake
 - vkareh
-- zgalor
 options: {}
 reviewers:
 - ahitacat

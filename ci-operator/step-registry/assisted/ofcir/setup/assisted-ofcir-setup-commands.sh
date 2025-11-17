@@ -79,12 +79,15 @@ cat > prepare-ansible.yaml <<-EOF
         dest: "{{ SHARED_DIR }}/ansible.cfg"
         content: |
           [defaults]
-          callback_whitelist = profile_tasks
+          callbacks_enabled = profile_tasks
           host_key_checking = False
 
           verbosity = 2
-          stdout_callback = yaml
+          stdout_callback = ansible.builtin.default
           bin_ansible_callbacks = True
+
+          [callback_default]
+          result_format = yaml
 
           [ssh_connection]
           retries = 10
@@ -238,3 +241,45 @@ cat > ensure-network-manager-dns-servers.yaml <<-"EOF"
 EOF
 
 ansible-playbook ensure-network-manager-dns-servers.yaml -i "${SHARED_DIR}/inventory"
+
+cat > ensure-open-containers-policy.yaml <<-"EOF"
+- name: Make sure inventory contains at least one host
+  hosts: localhost
+  tasks:
+    - name: Fail if inventory is empty
+      ansible.builtin.fail:
+        msg: "[ERROR] Empty inventory. No host available."
+      when: groups.all|length == 0
+      
+- name: Configure Container Policy
+  hosts: all
+  tasks:
+    - name: Ensure .config/containers directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.config/containers"
+        state: directory
+        mode: '0755'
+
+    - name: Create containers policy.json file
+      ansible.builtin.copy:
+        dest: "{{ ansible_env.HOME }}/.config/containers/policy.json"
+        content: |
+          {
+              "default": [
+                  {
+                      "type": "insecureAcceptAnything"
+                  }
+              ],
+              "transports":
+                  {
+                      "docker-daemon":
+                          {
+                              "": [{"type":"insecureAcceptAnything"}]
+                          }
+                  }
+          }
+        mode: '0644'
+
+EOF
+
+ansible-playbook ensure-open-containers-policy.yaml -i "${SHARED_DIR}/inventory"

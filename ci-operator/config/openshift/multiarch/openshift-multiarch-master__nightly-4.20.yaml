@@ -127,7 +127,7 @@ tests:
         and configmaps into the build pod
     workflow: openshift-e2e-ibmcloud-heterogeneous
 - as: ocp-e2e-powervs-ovn-multi-p-px
-  cron: 30 17 * * *
+  cron: 0 1 * 1 SUN
   steps:
     cluster_profile: powervs-multi-1
     env:
@@ -173,7 +173,9 @@ tests:
         oc tag should change image\| when installed on the cluster should\| OpenShift
         alerting rules\| The HAProxy router should\| egressrouter cni resources\|
         pod should start\| pod sysctls\| build volumes should mount given secrets
-        and configmaps into the build pod
+        and configmaps into the build pod\| zstd:chunked Image should successfully
+        run date command\| templateinstance readiness test should report ready soon
+        after all annotated objects are ready
     workflow: openshift-e2e-aws-heterogeneous
 - as: ocp-e2e-aws-ovn-multi-day-0-x-a
   interval: 24h
@@ -206,6 +208,7 @@ tests:
         pods of a service across zones\| pods should keep the assigned EgressIPs
       TEST_SUITE: openshift/conformance/serial
     workflow: openshift-e2e-aws-heterogeneous
+  timeout: 6h0m0s
 - as: ocp-e2e-upgrade-aws-ovn-arm64
   interval: 72h
   steps:
@@ -241,11 +244,13 @@ tests:
     workflow: openshift-e2e-aws-image-ecosystem
 - as: ocp-e2e-ovn-serial-aws-multi-a-a
   interval: 72h
+  shard_count: 2
   steps:
     cluster_profile: aws-2
     env:
       OCP_ARCH: arm64
     workflow: openshift-e2e-aws-ovn-serial
+  timeout: 6h0m0s
 - as: ocp-e2e-aws-ovn-arm64
   interval: 72h
   steps:
@@ -346,6 +351,7 @@ tests:
     workflow: openshift-e2e-aws
 - as: ocp-e2e-aws-ovn-techpreview-serial-multi-a-a
   interval: 72h
+  shard_count: 3
   steps:
     cluster_profile: aws
     env:
@@ -356,9 +362,9 @@ tests:
       enable:
       - observers-resource-watch
     workflow: openshift-e2e-aws-serial
-  timeout: 5h0m0s
+  timeout: 6h0m0s
 - as: ocp-e2e-ibmcloud-ovn-multi-x-px
-  cron: 0 17 * * *
+  cron: 0 1 * 1 SUN
   steps:
     cluster_profile: ibmcloud-multi-ppc64le
     env:
@@ -411,7 +417,7 @@ tests:
 - as: ocp-e2e-ovn-remote-libvirt-s390x
   capabilities:
   - sshd-bastion
-  cron: 0 23 * * 1,4
+  cron: 0 0 * * 1,3
   steps:
     cluster_profile: libvirt-s390x-1
     dependencies:
@@ -423,27 +429,11 @@ tests:
       NODE_TUNING: "true"
       TEST_TYPE: conformance-parallel
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-e2e-ovn-agent-remote-libvirt-s390x
-  capabilities:
-  - sshd-bastion
-  cron: 0 5 * * 0
-  steps:
-    cluster_profile: libvirt-s390x-1
-    dependencies:
-      OPENSHIFT_INSTALL_TARGET: release:s390x-latest
-    env:
-      ARCH: s390x
-      BRANCH: "4.20"
-      ETCD_DISK_SPEED: slow
-      INSTALLER_TYPE: agent
-      TEST_TYPE: conformance-parallel
-      USE_RAMFS: "true"
-      VOLUME_CAPACITY: 120G
-    workflow: openshift-e2e-libvirt-upi
+  timeout: 5h0m0s
 - as: ocp-e2e-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 23 * * 1,4
+  cron: 0 0 * * 2,4
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -453,10 +443,11 @@ tests:
       NODE_TUNING: "true"
       TEST_TYPE: conformance-parallel
     workflow: openshift-e2e-libvirt-upi
+  timeout: 5h0m0s
 - as: ocp-e2e-ovn-agent-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 5 * * 0
+  cron: 0 2 * * 0
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -468,10 +459,11 @@ tests:
       TEST_TYPE: conformance-parallel
       VOLUME_CAPACITY: 120G
     workflow: openshift-e2e-libvirt-upi
+  timeout: 5h0m0s
 - as: ocp-e2e-ovn-remote-libvirt-multi-z-xz
   capabilities:
   - sshd-bastion
-  cron: 0 8,20 * * 1-5
+  cron: 0 0 * * 2,4
   steps:
     cluster_profile: libvirt-s390x-amd64
     env:
@@ -480,10 +472,26 @@ tests:
       TEST_TYPE: conformance-parallel
       USE_RAMFS: "true"
     workflow: openshift-e2e-libvirt-upi-heterogeneous
+  timeout: 5h0m0s
+- as: ocp-heavy-build-ovn-remote-libvirt-multi-s390x
+  capabilities:
+  - sshd-bastion
+  cron: 0 1 * * 1,3
+  steps:
+    cluster_profile: libvirt-s390x-1
+    dependencies:
+      OPENSHIFT_INSTALL_TARGET: release:s390x-latest
+    env:
+      ARCH: s390x
+      BRANCH: "4.20"
+      ETCD_DISK_SPEED: slow
+      NODE_TUNING: "true"
+      TEST_TYPE: heavy-build
+    workflow: openshift-e2e-libvirt-upi
 - as: ocp-heavy-build-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 23 * * 3
+  cron: 0 1 * * 2,4
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -496,7 +504,7 @@ tests:
 - as: ocp-image-ecosystem-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 3 * * 0
+  cron: 0 0 * * 0
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -508,7 +516,7 @@ tests:
 - as: ocp-jenkins-e2e-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 4 * * 0
+  cron: 0 1 * * 0
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -520,7 +528,7 @@ tests:
 - as: ocp-e2e-serial-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 3 * * 6
+  cron: 0 0 * * 6
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -532,7 +540,7 @@ tests:
 - as: ocp-fips-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 4 * * 6
+  cron: 0 1 * * 6
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -543,10 +551,11 @@ tests:
       NODE_TUNING: "true"
       TEST_TYPE: conformance-parallel
     workflow: openshift-e2e-libvirt-upi-fips
+  timeout: 5h0m0s
 - as: ocp-e2e-compact-ovn-remote-libvirt-multi-z-z
   capabilities:
   - sshd-bastion
-  cron: 0 5 * * 6
+  cron: 0 2 * * 6
   steps:
     cluster_profile: libvirt-s390x-1
     env:
@@ -557,12 +566,11 @@ tests:
       TEST_TYPE: conformance-parallel
       VOLUME_CAPACITY: 64GB
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-e2e-ovn-remote-libvirt-ppc64le
-  capabilities:
-  - sshd-bastion
-  cron: 0 23 * * 1,4
+- as: ocp-e2e-ovn-remote-s2s-libvirt-ppc64le
+  cluster: build10
+  cron: 0 0 * * 1,3
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     dependencies:
       OPENSHIFT_INSTALL_TARGET: release:ppc64le-latest
     env:
@@ -573,12 +581,12 @@ tests:
       TEST_TYPE: conformance-parallel
       USE_RAMFS: "true"
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-e2e-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 23 * * 1,4
+  timeout: 5h0m0s
+- as: ocp-e2e-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 0 * * 2,4
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
@@ -587,12 +595,12 @@ tests:
       TEST_TYPE: conformance-parallel
       USE_RAMFS: "true"
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-e2e-ovn-agent-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 5 * * 0
+  timeout: 5h0m0s
+- as: ocp-e2e-ovn-agent-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 2 * * 0
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
@@ -603,12 +611,12 @@ tests:
       USE_RAMFS: "true"
       VOLUME_CAPACITY: 120G
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-heavy-build-ovn-remote-libvirt-ppc64le
-  capabilities:
-  - sshd-bastion
-  cron: 0 23 * * 3
+  timeout: 5h0m0s
+- as: ocp-heavy-build-ovn-remote-s2s-libvirt-ppc64le
+  cluster: build10
+  cron: 0 1 * * 1,3
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     dependencies:
       OPENSHIFT_INSTALL_TARGET: release:ppc64le-latest
     env:
@@ -618,12 +626,11 @@ tests:
       TEST_TYPE: heavy-build
       USE_RAMFS: "true"
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-heavy-build-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 23 * * 3
+- as: ocp-heavy-build-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 1 * * 2,4
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
@@ -631,48 +638,44 @@ tests:
       TEST_TYPE: heavy-build
       USE_RAMFS: "true"
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-image-ecosystem-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 3 * * 0
+- as: ocp-image-ecosystem-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 0 * * 0
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
       ETCD_DISK_SPEED: slow
       TEST_TYPE: image-ecosystem
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-jenkins-e2e-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 4 * * 0
+- as: ocp-jenkins-e2e-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 1 * * 0
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
       ETCD_DISK_SPEED: slow
       TEST_TYPE: jenkins-e2e-rhel-only
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-e2e-serial-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 3 * * 6
+- as: ocp-e2e-serial-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 0 * * 6
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
       ETCD_DISK_SPEED: slow
       TEST_TYPE: conformance-serial
     workflow: openshift-e2e-libvirt-upi
-- as: ocp-fips-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 4 * * 6
+- as: ocp-fips-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 1 * * 6
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
@@ -680,12 +683,12 @@ tests:
       FIPS_ENABLED: "true"
       TEST_TYPE: conformance-parallel
     workflow: openshift-e2e-libvirt-upi-fips
-- as: ocp-e2e-compact-ovn-remote-libvirt-multi-p-p
-  capabilities:
-  - sshd-bastion
-  cron: 0 5 * * 6
+  timeout: 5h0m0s
+- as: ocp-e2e-compact-ovn-remote-s2s-libvirt-multi-p-p
+  cluster: build10
+  cron: 0 2 * * 6
   steps:
-    cluster_profile: libvirt-ppc64le
+    cluster_profile: libvirt-ppc64le-s2s
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
@@ -698,16 +701,17 @@ tests:
 - as: ocp-e2e-ovn-powervs-capi-multi-p-p
   capabilities:
   - sshd-bastion
-  cron: 0 11,23 * * *
+  cron: 0 1,13 * * *
   steps:
-    cluster_profile: powervs-7
+    cluster_profile: powervs-8
     env:
       ARCH: ppc64le
       BRANCH: "4.20"
-      CLUSTER_NAME_MODIFIER: capi-419
+      CLUSTER_NAME_MODIFIER: capi-420
       INSTALLER: powervs
       TEST_TYPE: conformance-parallel
     workflow: openshift-e2e-powervs-ipi
+  timeout: 5h0m0s
 - as: ocp-e2e-azure-ovn-multi-x-ax
   cron: 0 11 * * 0
   steps:
@@ -727,7 +731,9 @@ tests:
         oc tag should change image\| when installed on the cluster should\| OpenShift
         alerting rules\| The HAProxy router should\| egressrouter cni resources\|
         pod should start\| pod sysctls\| build volumes should mount given secrets
-        and configmaps into the build pod
+        and configmaps into the build pod\| zstd:chunked Image should successfully
+        run date command\| templateinstance readiness test should report ready soon
+        after all annotated objects are ready
     test:
     - ref: ipi-install-heterogeneous
     - ref: openshift-e2e-test
@@ -761,6 +767,57 @@ tests:
       COMPUTE_NODE_TYPE: t2a-standard-4
       OCP_ARCH: arm64
     workflow: openshift-e2e-gcp-ovn
+- as: ocp-e2e-gcp-ovn-multi-x-x-to-a-x
+  interval: 72h
+  steps:
+    cluster_profile: gcp-arm64
+    env:
+      MIGRATION_CP_MACHINE_TYPE: t2a-standard-4
+      MIGRATION_INFRA_MACHINE_TYPE: t2a-standard-4
+      TEST_SKIPS: deploymentconfigs\| should expose cluster services outside the cluster\|
+        FIPS TestFIPS\| Multi-stage image builds should succeed\| Optimized image
+        builds should succeed\| build can reference a cluster service\| custom build
+        with buildah\| oc new-app should succeed\| prune builds based on settings\|
+        s2i build with a root\| verify /run filesystem contents\| oc can run\| oc
+        debug\| oc idle\| Pods cannot access\| Image append should create\| Image
+        extract should extract\| Image info should display\| Image layer subresource\|
+        oc tag should change image\| when installed on the cluster should\| OpenShift
+        alerting rules\| The HAProxy router should\| egressrouter cni resources\|
+        pod should start\| pod sysctls\| build volumes should mount given secrets
+        and configmaps into the build pod\| control plane machine set operator should
+        not cause an early rollout\| The openshift-image-registry pods
+    test:
+    - ref: ipi-conf-inframachineset
+    - ref: multiarch-migration-machine-type
+    - ref: openshift-e2e-test
+    workflow: openshift-e2e-gcp-ovn
+- as: ocp-e2e-gcp-ovn-multi-a-a-to-x-a
+  interval: 72h
+  steps:
+    cluster_profile: gcp-arm64
+    env:
+      COMPUTE_NODE_TYPE: t2a-standard-4
+      MIGRATION_ARCHITECTURE: x86_64
+      MIGRATION_CP_MACHINE_TYPE: n2-standard-4
+      MIGRATION_INFRA_MACHINE_TYPE: n2-standard-4
+      OCP_ARCH: arm64
+      TEST_SKIPS: deploymentconfigs\| should expose cluster services outside the cluster\|
+        FIPS TestFIPS\| Multi-stage image builds should succeed\| Optimized image
+        builds should succeed\| build can reference a cluster service\| custom build
+        with buildah\| oc new-app should succeed\| prune builds based on settings\|
+        s2i build with a root\| verify /run filesystem contents\| oc can run\| oc
+        debug\| oc idle\| Pods cannot access\| Image append should create\| Image
+        extract should extract\| Image info should display\| Image layer subresource\|
+        oc tag should change image\| when installed on the cluster should\| OpenShift
+        alerting rules\| The HAProxy router should\| egressrouter cni resources\|
+        pod should start\| pod sysctls\| build volumes should mount given secrets
+        and configmaps into the build pod\| control plane machine set operator should
+        not cause an early rollout\| The openshift-image-registry pods
+    test:
+    - ref: ipi-conf-inframachineset
+    - ref: multiarch-migration-machine-type
+    - ref: openshift-e2e-test
+    workflow: openshift-e2e-gcp-ovn
 - as: ocp-e2e-upgrade-gcp-ovn-multi-a-a
   interval: 72h
   steps:
@@ -788,7 +845,9 @@ tests:
         oc tag should change image\| when installed on the cluster should\| OpenShift
         alerting rules\| The HAProxy router should\| egressrouter cni resources\|
         pod should start\| pod sysctls\| build volumes should mount given secrets
-        and configmaps into the build pod
+        and configmaps into the build pod\| zstd:chunked Image should successfully
+        run date command\| templateinstance readiness test should report ready soon
+        after all annotated objects are ready
     test:
     - ref: ipi-install-heterogeneous
     - ref: openshift-e2e-test
@@ -811,7 +870,9 @@ tests:
         oc tag should change image\| when installed on the cluster should\| OpenShift
         alerting rules\| The HAProxy router should\| egressrouter cni resources\|
         pod should start\| pod sysctls\| build volumes should mount given secrets
-        and configmaps into the build pod
+        and configmaps into the build pod\| zstd:chunked Image should successfully
+        run date command\| templateinstance readiness test should report ready soon
+        after all annotated objects are ready
     workflow: openshift-e2e-gcp-ovn
 - as: ocp-e2e-upgrade-gcp-ovn-multi-x-ax
   interval: 72h

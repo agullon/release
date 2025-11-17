@@ -9,9 +9,10 @@ aws:
     - sshd-bastion
   - name: build03
     capabilities:
-    - arm64
     - gpu
     - highperf
+    - intranet
+    - nested-podman
   - name: build05
     capabilities:
     - rce
@@ -21,13 +22,15 @@ aws:
     - gpu
     - highperf
     - intranet
+    - nested-podman
   - name: build07
     capabilities:
-    - arm64
     - gpu
     - highperf
     - intranet
+    - nested-podman
   - name: build09
+    blocked: false
     capabilities:
     - arm64
     - gpu
@@ -40,20 +43,28 @@ aws:
     - gpu
     - highperf
     - intranet
+    - nested-podman
   - name: build11
     capabilities:
-    - arm64
     - gpu
     - highperf
+    - intranet
     - rce
 gcp:
   - name: build02
+    blocked: false
     capabilities:
+    - gcp
     - kvm
-    capacity: 40
-    blocked: true
+    - nested-podman
   - name: build04
+    blocked: false
     capabilities:
+    - gcp
     - kvm
     - rce
+  - name: build08
     blocked: false
+    capabilities:
+    - gcp
+    - kvm
